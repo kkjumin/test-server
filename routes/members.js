@@ -1,26 +1,10 @@
 var express = require("express");
+const { MongooseDocument } = require("mongoose");
 var router = express.Router();
-var User = require("../schemas/users");
-var axios = require("axios");
-
-router.get("/restday", (req, res) => {
-  axios
-    .get(
-      "http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo?_type=json&ServiceKey=%2FPMziA0mSdPA44MMw9NPzpUjPOhJqbOUncZDFQek74ymt2sCyM8BKFyS%2BfRCYB70E1ZbSj0m3v3huCKjWVKrwg%3D%3D",
-      {
-        params: {
-          solYear: req.body.year,
-          solMonth: req.body.month,
-        },
-      }
-    )
-    .then((response) => {
-      res.json(response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-});
+var User = require("../schemas/members");
+var moment = require("moment");
+// var bodyParser = require("body-parser");
+// var multer = require("multer");
 
 router.get("/", (req, res) => {
   User.find({})
@@ -35,11 +19,19 @@ router.get("/", (req, res) => {
 router.post("/", (req, res) => {
   User.insertMany({
     name: req.body.name,
-    age: req.body.age,
-    married: req.body.married,
+    birth: moment(req.body.birth).format("YYYY.MM.DD"),
+    body: { height: req.body.height, weight: req.body.weight },
+    homeTown: req.body.homeTown,
+    nickName: req.body.nickName,
   })
     .then((result) => {
-      res.json({ result: { code: "Y", message: "Success" } });
+      res.json({
+        result: {
+          code: "Y",
+          message: "Success",
+        },
+        result,
+      });
     })
     .catch((err) => {
       console.error(err.message);
@@ -50,7 +42,13 @@ router.post("/", (req, res) => {
 router.put("/", (req, res) => {
   let target = { name: req.body.name };
   let newValue = {
-    $set: { age: req.body.age, married: req.body.married },
+    $set: {
+      name: req.body.name,
+      birth: moment(req.body.birth).format("YYYY.MM.DD"),
+      body: { height: req.body.height, weight: req.body.weight },
+      homeTown: req.body.homeTown,
+      nickName: req.body.nickName,
+    },
   };
   User.updateOne(target, newValue)
     .then((result) => {
@@ -69,9 +67,7 @@ router.put("/", (req, res) => {
     });
 });
 
-router.delete("/", (req, res) => {
-  console.log(req.body.name);
-
+router.delete("/", (req, res, next) => {
   User.deleteOne({ name: req.body.name })
     .then((result) => {
       if (result.deletedCount === 0)
