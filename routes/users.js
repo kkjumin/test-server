@@ -4,13 +4,15 @@ var User = require("../schemas/users");
 var axios = require("axios");
 
 router.get("/restday", (req, res) => {
+  const solYear = req.body.year;
+  const solMonth = req.body.month;
   axios
     .get(
       "http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo?_type=json&ServiceKey=%2FPMziA0mSdPA44MMw9NPzpUjPOhJqbOUncZDFQek74ymt2sCyM8BKFyS%2BfRCYB70E1ZbSj0m3v3huCKjWVKrwg%3D%3D",
       {
         params: {
-          solYear: req.body.year,
-          solMonth: req.body.month,
+          solYear: solYear,
+          solMonth: solMonth < 10 ? "0" + solMonth : solMonth,
         },
       }
     )

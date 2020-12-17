@@ -3,4 +3,5 @@ module.exports = () => {
   require("./users");
   require("./comments");
   require("./members");
+  require("./files");
 };
