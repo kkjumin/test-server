@@ -4,13 +4,15 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const imageSchema = new Schema({
-  imgName: {
+  name: {
     type: String,
     required: true,
+    unique: true,
   },
-  imgFile: {
+  url: {
     type: String,
     required: true,
+    unique: true,
   },
 });
 
