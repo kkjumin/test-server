@@ -7,8 +7,8 @@ const members = require("./members.js");
 const files = require("./files");
 
 router.use("/", main);
-router.use("/users", users);
-router.use("/members", members);
-router.use("/files", files);
+router.use("/api/users", users);
+router.use("/api/members", members);
+router.use("/api/files", files);
 
 module.exports = router;
