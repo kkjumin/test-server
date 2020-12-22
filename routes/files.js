@@ -34,9 +34,6 @@ router.get("/img/:name", (req, res) => {
   fs.readFile(imgUrl, function (err, data) {
     res.end(data);
   });
-  // fs.readFile(imgUrl, function (err) {
-  //   if (err) return console.log(err);
-  // });
 });
 
 router.post("/", upload.single("img"), (req, res) => {
