@@ -89,13 +89,10 @@ router.delete("/", (req, res, next) => {
 
   Img.deleteOne({ name: req.body.name })
     .then((result) => {
-      if (result.deletedCount === 0)
-        throw { result: { code: "N", message: "Fail" } };
+      if (result.deletedCount === 0) throw { code: "N", message: "Fail" };
       res.json({
-        result: {
-          code: "Y",
-          message: "Success",
-        },
+        code: "Y",
+        message: "Success",
       });
       fs.unlink(imgUrl, function (err) {
         if (err) return console.log(err);
