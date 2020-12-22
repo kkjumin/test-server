@@ -40,7 +40,8 @@ router.get("/img/:name", (req, res) => {
 });
 
 router.post("/", upload.single("img"), (req, res) => {
-  let imgUrl = process.env.SERVER + "/files/img/" + req.file.filename;
+  let imgUrl = process.env.SERVER + "/api/files/img/" + req.file.filename;
+  console.log(imgUrl);
   Img.insertMany({ name: req.file.filename, url: imgUrl })
     .then((result) => {
       res.json({
